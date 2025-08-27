@@ -4,8 +4,10 @@ import datetime
 app = Flask(__name__)
 
 blog_posts = [
-    {"id": 1, "author": "John Doe", "title": "First Post", "content": "This is my first post.", "date": "2023-01-01"},
-    {"id": 2, "author": "Jane Doe", "title": "Second Post", "content": "This is another post.", "date": "2023-01-02"}
+    {"id": 1, "author": "John Doe", "title": "First Post", "content": "This is my first post.", "date": "2023-01-01",
+     "likes": 0},
+    {"id": 2, "author": "Jane Doe", "title": "Second Post", "content": "This is another post.", "date": "2023-01-02",
+     "likes": 0}
 ]
 
 
@@ -72,6 +74,18 @@ def update(post_id):
 
     # Bei GET-Anfrage: zeige das Bearbeitungsformular an
     return render_template('update.html', post=post)
+
+
+@app.route('/like/<int:post_id>', methods=['POST'])
+def like(post_id):
+    post = fetch_post_by_id(post_id)
+    if post is None:
+        return "Post not found", 404
+
+    # Erhöhe die Like-Anzahl um 1
+    post['likes'] += 1
+
+    return redirect(url_for('index'))
 
 
 if __name__ == '__main__':
