@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Flask Blog</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>Welcome to My Flask Blog!</h1>
+
+    {# Überprüfe, ob es überhaupt Beiträge gibt, bevor du die Schleife startest #}
+    {% if posts %}
+        {# Hier beginnt die for-Schleife. 'post' ist eine temporäre Variable für jeden einzelnen Beitrag in der Liste 'posts'. #}
+        {% for post in posts %}
+            <div class="post">
+                <h2>{{ post.title }}</h2> {# Zeigt den Titel des aktuellen Beitrags an #}
+                <p><em>Written by {{ post.author }} on {{ post.date }}</em></p> {# Zeigt Autor und Datum an #}
+                <p>{{ post.content }}</p> {# Zeigt den Inhalt des aktuellen Beitrags an #}
+            </div>
+        {% endfor %}
+    {% else %}
+        {# Dieser Block wird angezeigt, wenn die 'posts'-Liste leer ist oder nicht existiert #}
+        <p>No blog posts found.</p>
+    {% endif %}
+
+</body>
+</html>
