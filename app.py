@@ -13,6 +13,7 @@ blog_posts = [
 
 # Hilfsfunktion zum Finden eines Posts nach ID
 def fetch_post_by_id(post_id):
+    """posts nach id finden"""
     for post in blog_posts:
         if post["id"] == post_id:
             return post
