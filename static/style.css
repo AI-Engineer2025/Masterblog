@@ -5,6 +5,12 @@ body {
     color: #333;
 }
 
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
 h1 {
     text-align: center;
     color: #4F4F4F;
@@ -16,6 +22,7 @@ h1 {
     padding: 20px;
     margin-bottom: 20px;
     border-radius: 8px;
+    position: relative;
 }
 
 .post h2 {
@@ -24,4 +31,18 @@ h1 {
 
 .post p {
     margin: 10px 0;
+}
+
+.delete-btn {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.delete-btn:hover {
+    background-color: #c82333;
 }
