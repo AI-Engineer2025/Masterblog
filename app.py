@@ -1,3 +1,8 @@
+"""
+Flask Blog Application
+A simple blog application with CRUD operations and like functionality.
+"""
+
 from flask import Flask, render_template, request, redirect, url_for
 import datetime
 
@@ -10,10 +15,17 @@ blog_posts = [
      "likes": 0}
 ]
 
-
 # Hilfsfunktion zum Finden eines Posts nach ID
 def fetch_post_by_id(post_id):
-    """posts nach id finden"""
+    """
+    Find a blog post by its ID.
+
+    Args:
+        post_id (int): The ID of the post to find
+
+    Returns:
+        dict or None: The post dictionary if found, None otherwise
+    """
     for post in blog_posts:
         if post["id"] == post_id:
             return post
@@ -22,11 +34,26 @@ def fetch_post_by_id(post_id):
 
 @app.route('/')
 def index():
+    """
+        Display the main blog page with all posts.
+
+        Returns:
+            Rendered index.html template with all blog posts
+        """
     return render_template('index.html', posts=blog_posts)
 
 
 @app.route('/add', methods=['GET', 'POST'])
 def add():
+    """
+        Handle adding new blog posts.
+        GET: Display the add post form
+        POST: Process the form and add new post to blog_posts
+
+        Returns:
+            Redirect to index page after successful post creation,
+            or render add.html form for GET requests
+        """
     if request.method == 'POST':
         title = request.form.get('title')
         author = request.form.get('author')
@@ -41,6 +68,7 @@ def add():
             'author': author,
             'content': content,
             'date': current_date,
+            'likes': 0  # FIXED: likes field added for new posts
         }
 
         blog_posts.append(new_post)
@@ -48,17 +76,35 @@ def add():
 
     return render_template('add.html')
 
-
 @app.route('/delete/<int:post_id>', methods=['POST'])
 def delete(post_id):
+    """
+        Delete a blog post by its ID.
+
+        Args:
+            post_id (int): The ID of the post to delete
+
+        Returns:
+            Redirect to index page after deletion
+        """
     global blog_posts
     blog_posts = [post for post in blog_posts if post["id"] != post_id]
     return redirect(url_for('index'))
 
-
 @app.route('/update/<int:post_id>', methods=['GET', 'POST'])
 def update(post_id):
-    # Hole den Blog-Post mit der gegebenen ID
+    """
+        Handle updating existing blog posts.
+        GET: Display the update form with current post data
+        POST: Process the form and update the post
+
+        Args:
+            post_id (int): The ID of the post to update
+
+        Returns:
+            Redirect to index page after successful update,
+            or render update.html form for GET requests
+        """
     post = fetch_post_by_id(post_id)
     if post is None:
         # Post nicht gefunden
@@ -76,9 +122,17 @@ def update(post_id):
     # Bei GET-Anfrage: zeige das Bearbeitungsformular an
     return render_template('update.html', post=post)
 
-
 @app.route('/like/<int:post_id>', methods=['POST'])
 def like(post_id):
+    """
+        Increment the like count for a specific post.
+
+        Args:
+            post_id (int): The ID of the post to like
+
+        Returns:
+            Redirect to index page after incrementing likes
+        """
     post = fetch_post_by_id(post_id)
     if post is None:
         return "Post not found", 404
@@ -87,7 +141,6 @@ def like(post_id):
     post['likes'] += 1
 
     return redirect(url_for('index'))
-
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=5001, debug=True)
